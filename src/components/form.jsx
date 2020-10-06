@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-// import './style.css';
+import './form.css';
 
 
 class Form extends Component {
@@ -196,7 +196,7 @@ class Form extends Component {
         <div className="errorMsg">{this.state.errors.location}</div>
 
         <label>Languages(FIX)</label>
-        <input type="text" name="language" value={this.state.fields.language} onChange={this.handleChange} />
+        <input type="checkbox" name="language" value={this.state.fields.language} onChange={this.handleChange} />
         <div className="errorMsg">{this.state.errors.language}</div>
 
         <label>Email</label>
@@ -207,11 +207,22 @@ class Form extends Component {
         <input type="text" name="phone" value={this.state.fields.phone} onChange={this.handleChange}   />
         <div className="errorMsg">{this.state.errors.phone}</div>
 
-        <label>Gender</label>
-        <input type="radio" name="gender" value={this.state.fields.gender} onChange={this.handleChange} />Male
-        <input type="radio" name="gender" value={this.state.fields.gender} onChange={this.handleChange} />Female
+        <table>
+          <tr>
+            <th><label>Gender</label></th>
+            <th></th>
+          </tr>
+          <tr>
+            <td>Male</td>
+            <td><input type="radio" name="gender" value={this.state.fields.gender} onChange={this.handleChange} /></td>
+          </tr>
+          <tr>
+            <td>Female</td>
+            <td><input type="radio" name="gender" value={this.state.fields.gender} onChange={this.handleChange} /></td>
+          </tr>
+        </table>
         <div className="errorMsg">{this.state.errors.gender}</div>
-
+        
         <label>Medical Registration Number</label>
         <input type="text" name="regno" value={this.state.fields.regno} onChange={this.handleChange} />
         <div className="errorMsg">{this.state.errors.regno}</div>
@@ -224,7 +235,7 @@ class Form extends Component {
         <input type="text" name="specialization" value={this.state.fields.specialization} onChange={this.handleChange} />
         <div className="errorMsg">{this.state.errors.specialization}</div>
 
-        <input type="submit" className="button"  value="Register"/>
+        <input type="submit" className="button"  value="Submit Data"/>
         </form>
     </div>
 </div>
