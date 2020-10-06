@@ -171,67 +171,117 @@ class Form extends Component {
     <div id="main-registration-container">
      <div id="register">
         <form method="post"  name="userRegistrationForm"  onSubmit= {this.submituserRegistrationForm} >
-        <label>Name</label>
+        <label><strong>Name :</strong></label>
         <input type="text" name="username" value={this.state.fields.username} onChange={this.handleChange} />
         <div className="errorMsg">{this.state.errors.username}</div>
 
-        <label>Speaciality(FIX)</label>
-        <input type="text" name="speciality" value={this.state.fields.speciality} onChange={this.handleChange} />
+        <label><strong> Speaciality(FIX) :</strong></label>
+        <input type="dropdown" name="speciality" value={this.state.fields.speciality} onChange={this.handleChange} />
         <div className="errorMsg">{this.state.errors.speciality}</div>
 
-        <label>Experience</label>
+        <label><strong> Experience :</strong></label>
         <input type="number" name="experience" value={this.state.fields.experience} onChange={this.handleChange} />
         <div className="errorMsg">{this.state.errors.experience}</div>
 
-        <label>Consult Fees</label>
+        <label><strong> Consult Fees :</strong></label>
         <input type="number" name="fees" value={this.state.fields.fees} onChange={this.handleChange} />
         <div className="errorMsg">{this.state.errors.fees}</div>
 
-        <label>Qualification</label>
+        <label><strong> Qualification :</strong></label>
         <input type="text" name="qualification" value={this.state.fields.qualification} onChange={this.handleChange} />
         <div className="errorMsg">{this.state.errors.qualification}</div>
 
-        <label>Practising At</label>
+        <label><strong> Practising At :</strong></label>
         <input type="text" name="location" value={this.state.fields.location} onChange={this.handleChange} />
         <div className="errorMsg">{this.state.errors.location}</div>
 
-        <label>Languages(FIX)</label>
-        <input type="checkbox" name="language" value={this.state.fields.language} onChange={this.handleChange} />
+        <label><strong> Languages known :</strong></label>
+        <table>
+          <tr>
+            <td >HINDI</td>
+            <td className="gender"><input type="checkbox" name="hindi" value={this.state.fields.language} onChange={this.handleChange} /></td>
+          </tr>
+          <tr>
+            <td >ENGLISH</td>
+            <td className="gender"><input type="checkbox" name="english" value={this.state.fields.language} onChange={this.handleChange} /></td>
+          </tr>
+          <tr>
+            <td>BENGALI</td>
+            <td className="gender"><input type="checkbox" name="bengali" value={this.state.fields.language} onChange={this.handleChange} /></td>
+          </tr>
+          <tr>
+            <td>ORIYA</td>
+            <td className="gender"><input type="checkbox" name="oriya" value={this.state.fields.language} onChange={this.handleChange} /></td>
+          </tr>
+          <tr>
+            <td>ASSAMESE</td>
+            <td className="gender"><input type="checkbox" name="assamese" value={this.state.fields.language} onChange={this.handleChange} /></td>
+          </tr>
+          <tr>
+            <td>GUJRATI</td>
+            <td className="gender"><input type="checkbox" name="gujrati" value={this.state.fields.language} onChange={this.handleChange} /></td>
+          </tr>
+          <tr>
+            <td>MARATHI</td>
+            <td className="gender"><input type="checkbox" name="marathi" value={this.state.fields.language} onChange={this.handleChange} /></td>
+          </tr>
+          <tr>
+            <td>TELUGU</td>
+            <td className="gender"><input type="checkbox" name="telugu" value={this.state.fields.language} onChange={this.handleChange} /></td>
+          </tr>
+          <tr>
+            <td>TAMIL</td>
+            <td className="gender"><input type="checkbox" name="tamil" value={this.state.fields.language} onChange={this.handleChange} /></td>
+          </tr>
+          <tr>
+            <td>PUNJABI</td>
+            <td className="gender"><input type="checkbox" name="punjabi" value={this.state.fields.language} onChange={this.handleChange} /></td>
+          </tr>
+          <tr>
+            <td>MALAYALAM</td>
+            <td className="gender"><input type="checkbox" name="malayalam" value={this.state.fields.language} onChange={this.handleChange} /></td>
+          </tr>
+          <tr>
+            <td>KANNADA</td>
+            <td className="gender"><input type="checkbox" name="kannada" value={this.state.fields.language} onChange={this.handleChange} /></td>
+          </tr>
+        </table>
         <div className="errorMsg">{this.state.errors.language}</div>
 
-        <label>Email</label>
+        <label><strong> Email :</strong></label>
         <input type="text" name="emailid" value={this.state.fields.emailid} onChange={this.handleChange}  />
         <div className="errorMsg">{this.state.errors.emailid}</div>
 
-        <label>Phone</label>
+        <label><strong> Phone :</strong></label>
         <input type="text" name="phone" value={this.state.fields.phone} onChange={this.handleChange}   />
         <div className="errorMsg">{this.state.errors.phone}</div>
 
+        <label><strong> Gender :</strong></label>
         <table>
           <tr>
-            <th><label>Gender</label></th>
-            <th></th>
-          </tr>
-          <tr>
             <td>Male</td>
-            <td><input type="radio" name="gender" value={this.state.fields.gender} onChange={this.handleChange} /></td>
+            <td className="gender"><input type="radio" name="gender" value={this.state.fields.gender} onChange={this.handleChange} /></td>
           </tr>
           <tr>
             <td>Female</td>
-            <td><input type="radio" name="gender" value={this.state.fields.gender} onChange={this.handleChange} /></td>
+            <td className="gender"><input type="radio" name="gender" value={this.state.fields.gender} onChange={this.handleChange} /></td>
+          </tr>
+          <tr>
+            <td>Other</td>
+            <td className="gender"><input type="radio" name="gender" value={this.state.fields.gender} onChange={this.handleChange} /></td>
           </tr>
         </table>
         <div className="errorMsg">{this.state.errors.gender}</div>
         
-        <label>Medical Registration Number</label>
+        <label><strong> Medical Registration Number</strong></label>
         <input type="text" name="regno" value={this.state.fields.regno} onChange={this.handleChange} />
         <div className="errorMsg">{this.state.errors.regno}</div>
 
-        <label>Graduation</label>
+        <label><strong> Graduation</strong></label>
         <input type="text" name="graduation" value={this.state.fields.graduation} onChange={this.handleChange} />
         <div className="errorMsg">{this.state.errors.graduation}</div>
 
-        <label>Specialization</label>
+        <label><strong> Specialization</strong></label>
         <input type="text" name="specialization" value={this.state.fields.specialization} onChange={this.handleChange} />
         <div className="errorMsg">{this.state.errors.specialization}</div>
 

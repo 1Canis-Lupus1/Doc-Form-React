@@ -42,3 +42,11 @@
     color: #6B8E23;
     margin-bottom: 10px;
   }
+
+  .gender{
+    height:50px;
+    width:50px;
+    text-align: center;
+    vertical-align: middle;
+    padding-top: 5px;
+  }
