@@ -4,8 +4,8 @@ import {docData} from '../http/http-calls';
 
 
 class Form extends Component {
-    constructor() {
-      super();
+    constructor(props) {
+      super(props);
       this.state = {
         fields: {},
         errors: {}
@@ -18,10 +18,10 @@ class Form extends Component {
 
     componentDidMount(){
       const data=docData().then(response=>{
-        console.log(response)
+        // console.log("Response",response)
         this.setState({
           fields: response
-        })
+        },()=>console.log("Fetched",this.state.fields))
       })
       .catch(error=>console.log(error))
     }
@@ -40,7 +40,7 @@ class Form extends Component {
       e.preventDefault();
       if (this.validateForm()) {
           let fields = {};
-          console.log("Username :",this.state.fields.username);
+          console.log("Username :",this.state.fields.name);
           console.log("Speciality :");
           console.log("Experience :",this.state.fields.experience);
           console.log("Consulting Fees :",this.state.fields.fees);
@@ -197,9 +197,10 @@ class Form extends Component {
     return (
     <div id="main-registration-container">
      <div id="register">
+       {this.state.fields && 
         <form method="post"  name="userRegistrationForm"  onSubmit= {this.submituserRegistrationForm} >
         <label><strong>Name :</strong></label>
-        <input type="text" name="username" value={this.state.fields} onChange={this.handleChange} />
+        <input type="text" name="username" value={this.state.fields.name} onChange={this.handleChange} />
         <div className="errorMsg">{this.state.errors.username}</div>
 
         <label><strong> Speaciality(FIX) :</strong></label>
@@ -212,19 +213,19 @@ class Form extends Component {
         <div className="errorMsg">{this.state.errors.speciality}</div>
 
         <label><strong> Experience :</strong></label>
-        <input type="number" name="experience" value={this.state.fields} onChange={this.handleChange} />
+        <input type="number" name="experience" value={this.state.fields.experience} onChange={this.handleChange} />
         <div className="errorMsg">{this.state.errors.experience}</div>
 
         <label><strong> Consult Fees :</strong></label>
-        <input type="number" name="fees" value={this.state.fields} onChange={this.handleChange} />
+        <input type="number" name="fees" value={this.state.fields.fee} onChange={this.handleChange} />
         <div className="errorMsg">{this.state.errors.fees}</div>
 
         <label><strong> Qualification :</strong></label>
-        <input type="text" name="qualification" value={this.state.fields} onChange={this.handleChange} />
+        <input type="text" name="qualification" value={this.state.fields.qualification} onChange={this.handleChange} />
         <div className="errorMsg">{this.state.errors.qualification}</div>
 
         <label><strong> Practising At :</strong></label>
-        <input type="text" name="location" value={this.state.fields} onChange={this.handleChange} />
+        <input type="text" name="location" value={this.state.fields.location} onChange={this.handleChange} />
         <div className="errorMsg">{this.state.errors.location}</div>
 
         <label><strong> Languages known :</strong></label>
@@ -283,11 +284,11 @@ class Form extends Component {
         <div className="errorMsg">{this.state.errors.language}</div>
 
         <label><strong> Email :</strong></label>
-        <input type="text" name="emailid" value={this.state.fields} onChange={this.handleChange}  />
+        <input type="text" name="emailid" value={this.state.fields.email} onChange={this.handleChange}  />
         <div className="errorMsg">{this.state.errors.emailid}</div>
 
         <label><strong> Phone :</strong></label>
-        <input type="text" name="phone" value={this.state.fields} onChange={this.handleChange}   />
+        <input type="text" name="phone" value={this.state.fields.phone} onChange={this.handleChange}   />
         <div className="errorMsg">{this.state.errors.phone}</div>
 
         <label><strong> Gender :</strong></label>
@@ -310,23 +311,23 @@ class Form extends Component {
         <div className="errorMsg">{this.state.errors.gender}</div>
         
         <label><strong> Medical Registration Number :</strong></label>
-        <input type="text" name="regno" value={this.state.fields} onChange={this.handleChange} />
+        <input type="text" name="regno" value={this.state.fields.registrationNumber} onChange={this.handleChange} />
         <div className="errorMsg">{this.state.errors.regno}</div>
 
         <label><strong> Graduation :</strong></label>
-        <textarea type="text" name="graduation" value={this.state.fields} onChange={this.handleChange} ></textarea>
+        <textarea type="text" name="graduation" value={this.state.fields.qualification} onChange={this.handleChange} ></textarea>
         <div className="errorMsg">{this.state.errors.graduation}</div>
 
         <label><strong> Specialization :</strong></label>
-        <textarea type="text" name="specialization" value={this.state.fields} onChange={this.handleChange} ></textarea>
+        <textarea type="text" name="specialization" value={this.state.fields.specialty} onChange={this.handleChange} ></textarea>
         <div className="errorMsg">{this.state.errors.specialization}</div>
 
         <label><strong> Super Specialization :</strong></label>
-        <textarea type="text" name="supSpecialization" value={this.state.fields} onChange={this.handleChange} ></textarea>
+        <textarea type="text" name="supSpecialization" value={this.state.fields.superSpeciality} onChange={this.handleChange} ></textarea>
         <div className="errorMsg">{this.state.errors.supSpecialization}</div>
 
         <input type="submit" className="button"  value="Submit Data"/>
-        </form>
+        </form>}
     </div>
 </div>
 
