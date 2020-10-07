@@ -9,7 +9,7 @@ export const docData=()=>{
         )
         .then(res =>{
             resolve(res.doctor);
-            console.log(res);
+            // console.log(res.doctor.name.full);
         })
         .catch(error=>{
             console.log("API call error :",error);

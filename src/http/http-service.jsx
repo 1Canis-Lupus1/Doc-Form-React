@@ -41,7 +41,7 @@ export const makeGetRequest = async (
           .then(jsonResponse => {
             resolve(jsonResponse)
             // console.log("Resolved",resolve)
-            // console.log(jsonResponse)
+            // console.log(jsonResponse.doctor.name.full)
           })
           .catch(e => {
             console.log("XHR GET Error: ", e);
