@@ -1,5 +1,6 @@
 import React,{Component} from 'react';
 import './form.css';
+import {docData} from '../http/http-calls';
 
 
 class Form extends Component {
@@ -15,19 +16,44 @@ class Form extends Component {
 
     };
 
+    componentDidMount(){
+      const data=docData().then(response=>{
+        this.setState({
+          fields: response
+        })
+        console.log(this.state.fields)
+      })
+      .catch(error=>console.log(error))
+    }
+
     handleChange(e) {
       let fields = this.state.fields;
       fields[e.target.name] = e.target.value;
       this.setState({
         fields
       });
-
+      // console.log("Setting the entered values to state...");
+      // console.log(this.state.fields.username);
     }
 
     submituserRegistrationForm(e) {
       e.preventDefault();
       if (this.validateForm()) {
           let fields = {};
+          console.log("Username :",this.state.fields.username);
+          console.log("Speciality :");
+          console.log("Experience :",this.state.fields.experience);
+          console.log("Consulting Fees :",this.state.fields.fees);
+          console.log("Qualification :",this.state.fields.qualification);
+          console.log("Practising At :",this.state.fields.location);
+          console.log("Language :",this.state.fields.language);
+          console.log("EMail :",this.state.fields.emailid);
+          console.log("Phone :",this.state.fields.phone);
+          console.log("Gender :",this.state.fields.gender);
+          console.log("Medical Registration Number :",this.state.fields.regno);
+          console.log("Graduation :",this.state.fields.graduation);
+          console.log("Specialization :",this.state.fields.specialization);
+          console.log("Super-Specialization :",this.state.fields.supSpecialization);
           fields["username"] = "";
           fields["speciality"] = "";
           fields["experience"] = "";
@@ -41,6 +67,7 @@ class Form extends Component {
           fields["regno"] = "";
           fields["graduation"] = "";
           fields["specialization"] = "";
+          fields["supSpecialization"] = "";
           this.setState({fields:fields});
           alert("Form submission complete!");
       }
@@ -65,10 +92,10 @@ class Form extends Component {
         }
       }
 
-      if(!fields["speciality"]){
-        formIsValid = false;
-        errors["speciality"] = "*Please select the Doctor's Speciality"
-      }
+      // if(!fields["speciality"]){
+      //   formIsValid = false;
+      //   errors["speciality"] = "*Please select the Doctor's Speciality"
+      // }
 
       if(!fields["experience"]){
         formIsValid = false;
@@ -76,7 +103,7 @@ class Form extends Component {
       }
 
       if (typeof fields["experience"] !== "undefined") {
-        if (!fields["experience"].match(/^[0-9]{1}$/)) {
+        if (!fields["experience"].match(/^[0-9]{1,2}$/)) {
           formIsValid = false;
           errors["experience"] = "*Please enter a valid Experience";
         }
@@ -104,10 +131,10 @@ class Form extends Component {
         errors["location"] = "*Please enter the practising location"
       }
 
-      if(!fields["language"]){
-        formIsValid = false;
-        errors["language"] = "*Please select the preferred languages"
-      }
+      // if(!fields["language"]){
+      //   formIsValid = false;
+      //   errors["language"] = "*Please select the preferred languages"
+      // }
 
       
       if (!fields["emailid"]) {
@@ -136,10 +163,10 @@ class Form extends Component {
         }
       }
       
-      if(!fields["gender"]){
-        formIsValid = false;
-        errors["gender"] = "*Please select the gender"
-      }
+      // if(!fields["gender"]){
+      //   formIsValid = false;
+      //   errors["gender"] = "*Please select the gender"
+      // }
 
       if(!fields["regno"]){
         formIsValid = false;
@@ -154,6 +181,11 @@ class Form extends Component {
       if(!fields["specialization"]){
         formIsValid = false;
         errors["specialization"] = "*Please enter the specialization"
+      }
+
+      if(!fields["supSpecialization"]){
+        formIsValid = false;
+        errors["supSpecialization"] = "*Please enter the super-specialization"
       }
 
       this.setState({
@@ -176,7 +208,12 @@ class Form extends Component {
         <div className="errorMsg">{this.state.errors.username}</div>
 
         <label><strong> Speaciality(FIX) :</strong></label>
-        <input type="dropdown" name="speciality" value={this.state.fields.speciality} onChange={this.handleChange} />
+        <select onChange={this.handleChange}>
+          <option value="">Speciality1</option>
+          <option value="">Speciality2</option>
+          <option value="">Speciality3</option>
+        </select>
+        {/* <input type="dropdown" name="speciality" value={this.state.fields.speciality} onChange={this.handleChange} /> */}
         <div className="errorMsg">{this.state.errors.speciality}</div>
 
         <label><strong> Experience :</strong></label>
@@ -197,6 +234,7 @@ class Form extends Component {
 
         <label><strong> Languages known :</strong></label>
         <table>
+          <tbody>
           <tr>
             <td >HINDI</td>
             <td className="gender"><input type="checkbox" name="hindi" value={this.state.fields.language} onChange={this.handleChange} /></td>
@@ -245,6 +283,7 @@ class Form extends Component {
             <td>KANNADA</td>
             <td className="gender"><input type="checkbox" name="kannada" value={this.state.fields.language} onChange={this.handleChange} /></td>
           </tr>
+          </tbody>
         </table>
         <div className="errorMsg">{this.state.errors.language}</div>
 
@@ -258,6 +297,7 @@ class Form extends Component {
 
         <label><strong> Gender :</strong></label>
         <table>
+          <tbody>
           <tr>
             <td>Male</td>
             <td className="gender"><input type="radio" name="gender" value={this.state.fields.gender} onChange={this.handleChange} /></td>
@@ -270,20 +310,25 @@ class Form extends Component {
             <td>Other</td>
             <td className="gender"><input type="radio" name="gender" value={this.state.fields.gender} onChange={this.handleChange} /></td>
           </tr>
+          </tbody>
         </table>
         <div className="errorMsg">{this.state.errors.gender}</div>
         
-        <label><strong> Medical Registration Number</strong></label>
+        <label><strong> Medical Registration Number :</strong></label>
         <input type="text" name="regno" value={this.state.fields.regno} onChange={this.handleChange} />
         <div className="errorMsg">{this.state.errors.regno}</div>
 
-        <label><strong> Graduation</strong></label>
-        <input type="text" name="graduation" value={this.state.fields.graduation} onChange={this.handleChange} />
+        <label><strong> Graduation :</strong></label>
+        <textarea type="text" name="graduation" value={this.state.fields.graduation} onChange={this.handleChange} ></textarea>
         <div className="errorMsg">{this.state.errors.graduation}</div>
 
-        <label><strong> Specialization</strong></label>
-        <input type="text" name="specialization" value={this.state.fields.specialization} onChange={this.handleChange} />
+        <label><strong> Specialization :</strong></label>
+        <textarea type="text" name="specialization" value={this.state.fields.specialization} onChange={this.handleChange} ></textarea>
         <div className="errorMsg">{this.state.errors.specialization}</div>
+
+        <label><strong> Super Specialization :</strong></label>
+        <textarea type="text" name="supSpecialization" value={this.state.fields.supSpecialization} onChange={this.handleChange} ></textarea>
+        <div className="errorMsg">{this.state.errors.supSpecialization}</div>
 
         <input type="submit" className="button"  value="Submit Data"/>
         </form>
