@@ -18,10 +18,10 @@ class Form extends Component {
 
     componentDidMount(){
       const data=docData().then(response=>{
+        console.log(response)
         this.setState({
           fields: response
         })
-        console.log(this.state.fields)
       })
       .catch(error=>console.log(error))
     }
@@ -192,23 +192,18 @@ class Form extends Component {
         errors: errors
       });
       return formIsValid;
-
-
     }
-
-
-
   render() {
     return (
     <div id="main-registration-container">
      <div id="register">
         <form method="post"  name="userRegistrationForm"  onSubmit= {this.submituserRegistrationForm} >
         <label><strong>Name :</strong></label>
-        <input type="text" name="username" value={this.state.fields.username} onChange={this.handleChange} />
+        <input type="text" name="username" value={this.state.fields} onChange={this.handleChange} />
         <div className="errorMsg">{this.state.errors.username}</div>
 
         <label><strong> Speaciality(FIX) :</strong></label>
-        <select onChange={this.handleChange}>
+        <select value={this.state.fields} onChange={this.handleChange}>
           <option value="">Speciality1</option>
           <option value="">Speciality2</option>
           <option value="">Speciality3</option>
@@ -217,19 +212,19 @@ class Form extends Component {
         <div className="errorMsg">{this.state.errors.speciality}</div>
 
         <label><strong> Experience :</strong></label>
-        <input type="number" name="experience" value={this.state.fields.experience} onChange={this.handleChange} />
+        <input type="number" name="experience" value={this.state.fields} onChange={this.handleChange} />
         <div className="errorMsg">{this.state.errors.experience}</div>
 
         <label><strong> Consult Fees :</strong></label>
-        <input type="number" name="fees" value={this.state.fields.fees} onChange={this.handleChange} />
+        <input type="number" name="fees" value={this.state.fields} onChange={this.handleChange} />
         <div className="errorMsg">{this.state.errors.fees}</div>
 
         <label><strong> Qualification :</strong></label>
-        <input type="text" name="qualification" value={this.state.fields.qualification} onChange={this.handleChange} />
+        <input type="text" name="qualification" value={this.state.fields} onChange={this.handleChange} />
         <div className="errorMsg">{this.state.errors.qualification}</div>
 
         <label><strong> Practising At :</strong></label>
-        <input type="text" name="location" value={this.state.fields.location} onChange={this.handleChange} />
+        <input type="text" name="location" value={this.state.fields} onChange={this.handleChange} />
         <div className="errorMsg">{this.state.errors.location}</div>
 
         <label><strong> Languages known :</strong></label>
@@ -237,62 +232,62 @@ class Form extends Component {
           <tbody>
           <tr>
             <td >HINDI</td>
-            <td className="gender"><input type="checkbox" name="hindi" value={this.state.fields.language} onChange={this.handleChange} /></td>
+            <td className="gender"><input type="checkbox" name="hindi" value={this.state.fields} onChange={this.handleChange} /></td>
           </tr>
           <tr>
             <td >ENGLISH</td>
-            <td className="gender"><input type="checkbox" name="english" value={this.state.fields.language} onChange={this.handleChange} /></td>
+            <td className="gender"><input type="checkbox" name="english" value={this.state.fields} onChange={this.handleChange} /></td>
           </tr>
           <tr>
             <td>BENGALI</td>
-            <td className="gender"><input type="checkbox" name="bengali" value={this.state.fields.language} onChange={this.handleChange} /></td>
+            <td className="gender"><input type="checkbox" name="bengali" value={this.state.fields} onChange={this.handleChange} /></td>
           </tr>
           <tr>
             <td>ORIYA</td>
-            <td className="gender"><input type="checkbox" name="oriya" value={this.state.fields.language} onChange={this.handleChange} /></td>
+            <td className="gender"><input type="checkbox" name="oriya" value={this.state.fields} onChange={this.handleChange} /></td>
           </tr>
           <tr>
             <td>ASSAMESE</td>
-            <td className="gender"><input type="checkbox" name="assamese" value={this.state.fields.language} onChange={this.handleChange} /></td>
+            <td className="gender"><input type="checkbox" name="assamese" value={this.state.fields} onChange={this.handleChange} /></td>
           </tr>
           <tr>
             <td>GUJRATI</td>
-            <td className="gender"><input type="checkbox" name="gujrati" value={this.state.fields.language} onChange={this.handleChange} /></td>
+            <td className="gender"><input type="checkbox" name="gujrati" value={this.state.fields} onChange={this.handleChange} /></td>
           </tr>
           <tr>
             <td>MARATHI</td>
-            <td className="gender"><input type="checkbox" name="marathi" value={this.state.fields.language} onChange={this.handleChange} /></td>
+            <td className="gender"><input type="checkbox" name="marathi" value={this.state.fields} onChange={this.handleChange} /></td>
           </tr>
           <tr>
             <td>TELUGU</td>
-            <td className="gender"><input type="checkbox" name="telugu" value={this.state.fields.language} onChange={this.handleChange} /></td>
+            <td className="gender"><input type="checkbox" name="telugu" value={this.state.fields} onChange={this.handleChange} /></td>
           </tr>
           <tr>
             <td>TAMIL</td>
-            <td className="gender"><input type="checkbox" name="tamil" value={this.state.fields.language} onChange={this.handleChange} /></td>
+            <td className="gender"><input type="checkbox" name="tamil" value={this.state.fields} onChange={this.handleChange} /></td>
           </tr>
           <tr>
             <td>PUNJABI</td>
-            <td className="gender"><input type="checkbox" name="punjabi" value={this.state.fields.language} onChange={this.handleChange} /></td>
+            <td className="gender"><input type="checkbox" name="punjabi" value={this.state.fields} onChange={this.handleChange} /></td>
           </tr>
           <tr>
             <td>MALAYALAM</td>
-            <td className="gender"><input type="checkbox" name="malayalam" value={this.state.fields.language} onChange={this.handleChange} /></td>
+            <td className="gender"><input type="checkbox" name="malayalam" value={this.state.fields} onChange={this.handleChange} /></td>
           </tr>
           <tr>
             <td>KANNADA</td>
-            <td className="gender"><input type="checkbox" name="kannada" value={this.state.fields.language} onChange={this.handleChange} /></td>
+            <td className="gender"><input type="checkbox" name="kannada" value={this.state.fields} onChange={this.handleChange} /></td>
           </tr>
           </tbody>
         </table>
         <div className="errorMsg">{this.state.errors.language}</div>
 
         <label><strong> Email :</strong></label>
-        <input type="text" name="emailid" value={this.state.fields.emailid} onChange={this.handleChange}  />
+        <input type="text" name="emailid" value={this.state.fields} onChange={this.handleChange}  />
         <div className="errorMsg">{this.state.errors.emailid}</div>
 
         <label><strong> Phone :</strong></label>
-        <input type="text" name="phone" value={this.state.fields.phone} onChange={this.handleChange}   />
+        <input type="text" name="phone" value={this.state.fields} onChange={this.handleChange}   />
         <div className="errorMsg">{this.state.errors.phone}</div>
 
         <label><strong> Gender :</strong></label>
@@ -300,34 +295,34 @@ class Form extends Component {
           <tbody>
           <tr>
             <td>Male</td>
-            <td className="gender"><input type="radio" name="gender" value={this.state.fields.gender} onChange={this.handleChange} /></td>
+            <td className="gender"><input type="radio" name="gender" value={this.state.fields} onChange={this.handleChange} /></td>
           </tr>
           <tr>
             <td>Female</td>
-            <td className="gender"><input type="radio" name="gender" value={this.state.fields.gender} onChange={this.handleChange} /></td>
+            <td className="gender"><input type="radio" name="gender" value={this.state.fields} onChange={this.handleChange} /></td>
           </tr>
           <tr>
             <td>Other</td>
-            <td className="gender"><input type="radio" name="gender" value={this.state.fields.gender} onChange={this.handleChange} /></td>
+            <td className="gender"><input type="radio" name="gender" value={this.state.fields} onChange={this.handleChange} /></td>
           </tr>
           </tbody>
         </table>
         <div className="errorMsg">{this.state.errors.gender}</div>
         
         <label><strong> Medical Registration Number :</strong></label>
-        <input type="text" name="regno" value={this.state.fields.regno} onChange={this.handleChange} />
+        <input type="text" name="regno" value={this.state.fields} onChange={this.handleChange} />
         <div className="errorMsg">{this.state.errors.regno}</div>
 
         <label><strong> Graduation :</strong></label>
-        <textarea type="text" name="graduation" value={this.state.fields.graduation} onChange={this.handleChange} ></textarea>
+        <textarea type="text" name="graduation" value={this.state.fields} onChange={this.handleChange} ></textarea>
         <div className="errorMsg">{this.state.errors.graduation}</div>
 
         <label><strong> Specialization :</strong></label>
-        <textarea type="text" name="specialization" value={this.state.fields.specialization} onChange={this.handleChange} ></textarea>
+        <textarea type="text" name="specialization" value={this.state.fields} onChange={this.handleChange} ></textarea>
         <div className="errorMsg">{this.state.errors.specialization}</div>
 
         <label><strong> Super Specialization :</strong></label>
-        <textarea type="text" name="supSpecialization" value={this.state.fields.supSpecialization} onChange={this.handleChange} ></textarea>
+        <textarea type="text" name="supSpecialization" value={this.state.fields} onChange={this.handleChange} ></textarea>
         <div className="errorMsg">{this.state.errors.supSpecialization}</div>
 
         <input type="submit" className="button"  value="Submit Data"/>
