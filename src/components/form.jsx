@@ -124,21 +124,21 @@ class Form extends Component {
     if (typeof fields["experience"] !== "undefined") {
       if (!fields["experience"].toString().match(/^[0-9]{1,2}$/)) {
         formIsValid = false;
-        errors["experience"] = "*Please enter a valid Experience";
+        errors["experience"] = "*Please enter an experience between 0-99";
       }
     }
 
     if (typeof fields["fee"] !== "undefined") {
-      if (!fields["fee"].toString().match(/^[0-9]{5}$/)) {
+      if (!fields["fee"].toString().match(/^[0-9]{4,5}$/)) {
         formIsValid = false;
-        errors["fee"] = "*Please enter valid Amount";
+        errors["fee"] = "*Please enter valid Amount between 1,000 - 99,000";
       }
     }
 
     if(typeof fields["qualification"] !== "undefined"){
       if(!fields["qualification"].match(/^[a-zA-Z]*$/)){
         formIsValid=false;
-        errors["qualification"] = "*Please enter a valid qualification";
+        errors["qualification"] = "*Qualifications cannot contain a number or special character";
       }
     }
 
@@ -164,7 +164,7 @@ class Form extends Component {
     if (typeof fields["phone"] !== "undefined") {
       if (!fields["phone"].match(/^[0-9]{10}$/)) {
         formIsValid = false;
-        errors["phone"] = "*Please enter valid mobile no.";
+        errors["phone"] = "*Please enter valid 10 digit mobile no.";
       }
     }
 
