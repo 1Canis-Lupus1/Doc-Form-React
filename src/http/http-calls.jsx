@@ -10,6 +10,7 @@ export const docData=()=>{
         .then(res =>{
             resolve(res.doctor);
             // console.log(res.doctor.name.full);
+            // console.log("Status in calls:",res.error)
         })
         .catch(error=>{
             console.log("API call error :",error);
