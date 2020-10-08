@@ -239,7 +239,7 @@ class Form extends Component {
                 <tbody>
                   <tr>
                     <td >HINDI</td>
-                    <td className="gender"><input type="checkbox" name="hindi" value={this.state.fields} onChange={this.handleChange} /></td>
+                    <td className="gender"><input type="checkbox" name="hindi" value={this.state.fields} onChange={this.handleChange} checked/></td>
                   </tr>
                   <tr>
                     <td >ENGLISH</td>
@@ -302,7 +302,7 @@ class Form extends Component {
                 <tbody>
                   <tr>
                     <td>Male</td>
-                    <td className="gender"><input type="radio" name="gender" value={this.state.fields} onChange={this.handleChange} /></td>
+                    <td className="gender"><input type="radio" name="gender" value={this.state.fields} onChange={this.handleChange} checked/></td>
                   </tr>
                   <tr>
                     <td>Female</td>
