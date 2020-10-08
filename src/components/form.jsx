@@ -54,37 +54,34 @@ class Form extends Component {
     // console.log(this.state.status)
     if (this.validateForm()) {
       let fields = {};
-      // console.log("HEllo")
-      console.log("Username :", this.state.fields.name);
+      console.log("Doc Name :", this.state.fields.name);
       console.log("Speciality :");
       console.log("Experience :", this.state.fields.experience);
-      console.log("Consulting Fees :", this.state.fields.fees);
+      console.log("Consulting Fees :", this.state.fields.fee);
       console.log("Qualification :", this.state.fields.qualification);
       console.log("Practising At :", this.state.fields.location);
       console.log("Language :", this.state.fields.language);
-      console.log("EMail :", this.state.fields.emailid);
+      console.log("E-Mail :", this.state.fields.email);
       console.log("Phone :", this.state.fields.phone);
       console.log("Gender :", this.state.fields.gender);
-      console.log("Medical Registration Number :", this.state.fields.regno);
-      console.log("Graduation :", this.state.fields.graduation);
-      console.log("Specialization :", this.state.fields.specialization);
-      console.log("Super-Specialization :", this.state.fields.supSpecialization);
-      fields["username"] = "";
+      console.log("Medical Registration Number :", this.state.fields.registrationNumber);
+      console.log("Specialization :", this.state.fields.specialty);
+      console.log("Super-Specialization :", this.state.fields.superSpeciality);
+      fields["name"] = "";
       fields["speciality"] = "";
       fields["experience"] = "";
-      fields["fees"] = "";
+      fields["fee"] = "";
       fields["qualification"] = "";
       fields["location"] = "";
       fields["language"] = "";
-      fields["emailid"] = "";
+      fields["email"] = "";
       fields["phone"] = "";
       fields["gender"] = "";
-      fields["regno"] = "";
-      fields["graduation"] = "";
-      fields["specialization"] = "";
-      fields["supSpecialization"] = "";
+      fields["registrationNumber"] = "";
+      fields["specialty"] = "";
+      fields["superSpeciality"] = "";
       this.setState({ fields: fields });
-      alert("Form submission complete!");
+      alert("Form Submission Successful!!");
     }
 
   }
@@ -210,13 +207,13 @@ class Form extends Component {
               <input type="text" name="name" value={this.state.fields.name?.full || ""} onChange={this.handleChange} />
               <div className="errorMsg">{this.state.errors.name}</div>
 
-              {/* <label><strong> Speaciality(FIX) :</strong></label>
+              <label><strong> Speaciality(FIX) :</strong></label>
               <select onChange={this.handleChange} value={this.state.fields._specialty?.name || ""}>
-                <option value=""></option>
+                <option value="" >Cardiology</option>
                 <option value="">Speciality2</option>
                 <option value="">Speciality3</option>
               </select>
-              <div className="errorMsg">{this.state.errors._specialty?.name || ""}</div> */}
+              <div className="errorMsg">{this.state.errors._specialty?.name || ""}</div>
 
               <label><strong> Experience :</strong></label>
               <input type="number" name="experience" value={this.state.fields.experience} onChange={this.handleChange} />
