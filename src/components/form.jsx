@@ -1,345 +1,719 @@
-import React, { Component } from 'react';
-import './form.css';
-import { docData } from '../http/http-calls';
-
+import React, {Component} from "react";
+import "./form.css";
 
 class Form extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      fields: {},
-      isDirty: {
-        username: false
+      user: {
+        name: "",
+        speciality: "",
+
       },
-      status: false,
-      errors: {}
-    }
+      isTrue: {
+        name: "",
+        speciality: "",
+        experience: "",
+        consultFees: "",
+        qualification: "",
+        location: "",
+        lang: [],
+        email: "",
+        phone: "",
+        gender: "",
+        regNo: "",
+        specialize: "",
+        superSpecilize: "",
+      },
+      docData: {
+        name: "",
+        speciality: "",
+        experience: "",
+        consultFees: "",
+        qualification: "",
+        location: "",
+        lang: [],
+        email: "",
+        phone: "",
+        gender: "",
+        regNo: "",
+        specialize: "",
+        superSpecilize: "",
+      },
+      errors: {},
+      hasCharError: false,
+      attachToken: true,
+      specialities: [],
+    };
+    this.handleChange = this.handleChange.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
 
-    this.handleChange = this.handleChange.bind(this);
-    this.submituserRegistrationForm = this.submituserRegistrationForm.bind(this);
-
-  };
+  }
 
   componentDidMount() {
-    docData().then(response => {
-      console.log("Response",response)
-      this.setState({
-        fields: response,
-        status: true
-      })
-      // console.log("Status:", response.name)
-    })
-      .catch(error => console.log(error))
+    const docs = `http://178.128.127.115:3000/admin/v1/user/doc/5ede37431a52c86dba7f0051`;
+    const docsSpeciality = `http://178.128.127.115:3000/admin/v1/specialties`;
+    this.getDoctorDeatils(docs, this.state.attachToken);
+    this.getDoctorSpeciality(docsSpeciality, this.state.attachToken);
   }
 
-  handleChange(e) {
-    // const {fields,isDirty} =this.state;
-    // fields[field]=value;
-    // isDirty[field]=true;
-    // this.setState({fields,isDirty},()=>{
-    //   this.validateForm();
-    // });
-    let fields = this.state.fields;
-    fields[e.target.name] = e.target.value;
-    console.log("value",e.target.value) 
-    this.setState({
-      fields
-    },()=>{this.validateForm()});
-    console.log(this.state.fields)
+  getDoctorDeatils(docs, attachToken) {
+    let headers = {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    };
+    if (attachToken) {
+      try {
+        const authToken =
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlY2U0MjA0ZmZkOTliMGRkMTNhNDNjMSIsIl9pZCI6IjVlY2U0MjA0ZmZkOTliMGRkMTNhNDNjMSIsImZ1bGxOYW1lIjoiS2lyYW4gRGVibmF0aCIsImVtYWlsIjoidG90YW4wMDEwQGdtYWlsLmNvbSIsInVzZXJUeXBlIjoiQWRtaW4iLCJpc1N1cGVyQWRtaW4iOnRydWUsImlhdCI6MTYwMTk4Mjk3MiwiZXhwIjoxNjA0NTc0OTcyfQ.rnyN3M76h7xlzrZsY9gcIXa968uMcrW1J0o_GQzw-P0";
+        if (authToken) {
+          console.log(authToken);
+          headers["Authorization"] = authToken;
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    return new Promise((resolve, reject) => {
+      try {
+        fetch(docs, {
+          method: "GET",
+          headers: headers,
+        })
+          .then((res) => res.json())
+          .then((jsonResponse) => {
+            if (jsonResponse.error === false) {
+              // console.log(jsonResponse);
+              let details = jsonResponse.doctor;
+              console.log("Doctor Detail: ", details);
+              this.setState({
+                docData: {
+                  name: details.name.full,
+                  speciality: details._specialty.id,
+                  experience: details.experience,
+                  consultFees: details.fee,
+                  qualification: details.qualification,
+                  location: details.clinicOrHospitalName,
+                  lang: details.languages,
+                  email: details.email,
+                  phone: details.phone,
+                  gender: details.gender,
+                  regNo: details.registrationNumber,
+                  specialize: details.specialty,
+                  superSpecilize: details.superSpeciality,
+                }
+              });
+              resolve(jsonResponse);
+            } else {
+              console.log(jsonResponse);
+              reject(jsonResponse);
+            }
+          })
+          .catch((e) => {
+            console.log("XHR GET Error: ", e);
+            reject(e);
+          });
+      } catch (e) {
+        console.log(e);
+        reject();
+      }
+    });
   }
 
-  submituserRegistrationForm(e) {
-    e.preventDefault();
-    console.log("Submitiing")
-    // console.log(this.state.status)
-    if (this.validateForm()) {
-      let fields = {};
-      console.log("Doc Name :", this.state.fields.name);
-      console.log("Speciality :");
-      console.log("Experience :", this.state.fields.experience);
-      console.log("Consulting Fees :", this.state.fields.fee);
-      console.log("Qualification :", this.state.fields.qualification);
-      console.log("Practising At :", this.state.fields.location);
-      console.log("Language :", this.state.fields.language);
-      console.log("E-Mail :", this.state.fields.email);
-      console.log("Phone :", this.state.fields.phone);
-      console.log("Gender :", this.state.fields.gender);
-      console.log("Medical Registration Number :", this.state.fields.registrationNumber);
-      console.log("Specialization :", this.state.fields.specialty);
-      console.log("Super-Specialization :", this.state.fields.superSpeciality);
-      fields["name"] = "";
-      fields["speciality"] = "";
-      fields["experience"] = "";
-      fields["fee"] = "";
-      fields["qualification"] = "";
-      fields["location"] = "";
-      fields["language"] = "";
-      fields["email"] = "";
-      fields["phone"] = "";
-      fields["gender"] = "";
-      fields["registrationNumber"] = "";
-      fields["specialty"] = "";
-      fields["superSpeciality"] = "";
-      this.setState({ fields: fields });
-      alert("Form Submission Successful!!");
+  getDoctorSpeciality(docs, attachToken) {
+    let headers = {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    };
+    if (attachToken) {
+      try {
+        const authToken =
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlY2U0MjA0ZmZkOTliMGRkMTNhNDNjMSIsIl9pZCI6IjVlY2U0MjA0ZmZkOTliMGRkMTNhNDNjMSIsImZ1bGxOYW1lIjoiS2lyYW4gRGVibmF0aCIsImVtYWlsIjoidG90YW4wMDEwQGdtYWlsLmNvbSIsInVzZXJUeXBlIjoiQWRtaW4iLCJpc1N1cGVyQWRtaW4iOnRydWUsImlhdCI6MTYwMTk4Mjk3MiwiZXhwIjoxNjA0NTc0OTcyfQ.rnyN3M76h7xlzrZsY9gcIXa968uMcrW1J0o_GQzw-P0";
+        if (authToken) {
+          console.log(authToken);
+          headers["Authorization"] = authToken;
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    return new Promise((resolve, reject) => {
+      try {
+        fetch(docs, {
+          method: "GET",
+          headers: headers,
+        })
+          .then((res) => res.json())
+          .then((jsonResponse) => {
+            if (jsonResponse.error === false) {
+              console.log("Specialties Data: ", jsonResponse);
+              resolve(jsonResponse);
+              let speciality = jsonResponse.specialties.map((e) => {
+                console.log(e.name)
+                return e.name
+              })
+              this.setState({
+                specialities: speciality
+              })
+            } else {
+              console.log(jsonResponse);
+              reject(jsonResponse);
+            }
+          })
+          .catch((e) => {
+            console.log("XHR GET Error: ", e);
+            reject(e);
+          });
+      } catch (e) {
+        console.log(e);
+        reject();
+      }
+    });
+  }
+
+  handleChange = (field, value) => {
+    console.log(field, value);
+    const { docData, isTrue } = this.state;
+    if (field === 'languages') {
+      if (value.checked) {
+        docData[field].push(value.value)
+      } else {
+        docData[field].splice(docData[field].indexOf(value.value), 1)
+      }
+    } else {
+      docData[field] = value;
+    }
+    isTrue[field] = true
+    this.setState({ docData, isTrue }, () => {
+      this.validateForm();
+      console.log(this.state)
+    });
+
+    if (!value && typeof value === 'number') {
+      docData[field] = '';
+      isTrue[field] = true;
+      this.setState({ docData, isTrue }, () => {
+        this.validateForm();
+        console.log(this.state)
+      });
+      return;
     }
 
   }
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    let isTrue = {
+      name: true,
+      speciality: true,
+      experience: true,
+      consultFees: true,
+      qualification: true,
+      practisingAt: true,
+      lang: true,
+      email: true,
+      phone: true,
+      gender: true,
+      regNo: true,
+      graduation: true,
+      specialization: true,
+      superSpecialization: true,
+    };
+    this.setState({ isTrue }, () => {
+      let errors = this.validateForm();
+      console.log(errors);
+      if (!errors) {
+        const { docData } = this.state;
+        console.log("Final API call: ", docData);
+      }
+    });
+  };
 
   validateForm() {
-    // const {fields,isDirty,errors}=this.state;
-    // Object.keys(fields).forEach((value)=>{
-    //   if(value === "username" && isDirty.username){
-
-    //         
-    //   }
-    // })
-    let fields = this.state.fields;
-    let errors = {};
-    let formIsValid = true;
-
-    // if (!fields["name"]) {
-    //   // console.log("Doc Name",fields['username'])
-    //   formIsValid = false;
-    //   errors["name"] = "*Please enter the Doctor's full-name.";
-    // }
-
-    // if (typeof fields["name"] !== "undefined") {
-    //   console.log("Doc Name:", fields['name'])
-    //   // console.log(this.state.fields.name?.full || "")
-    //   if (!fields["name"].match(/^[a-zA-Z ]*$/)) {
-    //     formIsValid = false;
-    //     errors["name"] = "*Please enter doctor's full name(alphabet characters only).";
-    //   }
-    // }
-
-    // if(!fields["speciality"]){
-    //   formIsValid = false;
-    //   errors["speciality"] = "*Please select the Doctor's Speciality"
-    // }
-
-    if (typeof fields["experience"] !== "undefined") {
-      if (!fields["experience"].toString().match(/^[0-9]{1,2}$/)) {
-        formIsValid = false;
-        errors["experience"] = "*Please enter an experience between 0-99";
+    const { docData, isTrue, errors } = this.state;
+    Object.keys(docData).forEach((each) => {
+      switch (each) {
+        case 'name': {
+          if (isTrue.name) {
+            if (docData.name.length < 3) {
+              errors[each] = "*Please enter a valid name";
+            }
+            if (!docData.name.length) {
+              errors[each] = "*Required";
+            } else {
+              delete errors[each];
+              isTrue.name = false;
+            }
+          }
+          break;
+        }
+        case 'speciality': {
+          if (isTrue.speciality) {
+            if (!docData.speciality.trim().length) {
+              errors[each] = "*Please select the speciality";
+            } else {
+              delete errors[each];
+              isTrue.speciality = false;
+            }
+          }
+          break;
+        }
+        case 'experience': {
+          if (isTrue.experience) {
+            if (docData.experience < 0) {
+              errors[each] = "*Please Enter a valid experience";
+            } if (!docData.experience) {
+              errors[each] = "*Please fill above field";
+            } else {
+              delete errors[each];
+              isTrue.experience = false;
+            }
+          }
+          break;
+        }
+        case 'consultFees': {
+          if (isTrue.consultFees) {
+            if (docData.consultFees < 0) {
+              errors[each] = "*Please Enter a valid Fees";
+            } if (!docData.consultFees) {
+              errors[each] = "* Please fill above field";
+            } else {
+              delete errors[each];
+              isTrue.consultFees = false;
+            }
+          }
+          break;
+        }
+        case 'qualification': {
+          if (isTrue.qualification) {
+            if (!docData.qualification.trim().length) {
+              errors[each] = "*Please fill above field";
+            } else {
+              delete errors[each];
+              isTrue.qualification = false;
+            }
+          }
+          break;
+        }
+        case 'practisingAt': {
+          if (isTrue.practisingAt) {
+            if (!docData.practisingAt.trim().length) {
+              errors[each] = "*Please fill above field";
+            } else {
+              delete errors[each];
+              isTrue.practisingAt = false;
+            }
+          }
+          break;
+        }
+        case 'phone': {
+          if (isTrue.phone) {
+            if ((docData.phone).toString().length < 10 || (docData.phone).toString().length > 10) {
+              errors[each] = "*Please Enter a valid phone number";
+            } else {
+              if (!docData.phone) {
+                errors[each] = "*Please fill above field";
+              }
+              delete errors[each];
+              isTrue.phone = false;
+            }
+          }
+          break;
+        }
+        case 'email': {
+          if (isTrue.email) {
+            if (
+              docData.email.trim().length &&
+              !new RegExp(
+                "^[a-zA-Z0-9]{1}[a-zA-Z0-9._+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,3}$"
+              ).test(docData.email)
+            ) {
+              errors.email = "*Invalid Email";
+            }
+            if (!docData.email.trim().length) {
+              errors.email = "* Please fill above field";
+            } else {
+              delete errors[each];
+              isTrue.email = false;
+            }
+          }
+          break;
+        }
+        case 'gender': {
+          if (isTrue.gender) {
+            if (!docData.gender.trim().length) {
+              errors[each] = "*Please select a gender";
+            } else {
+              delete errors[each];
+              isTrue.gender = false;
+            }
+          }
+          break;
+        }
+        case 'regNo': {
+          if (isTrue.regNo) {
+            if (!docData.regNo.trim().length) {
+              errors[each] = "*Please fill above field";
+            } else {
+              delete errors[each];
+              isTrue.regNo = false;
+            }
+          }
+          break;
+        }
+        case 'graduation': {
+          if (isTrue.graduation) {
+            if (!docData.graduation.trim().length) {
+              errors[each] = "*Please fill above field";
+            } else {
+              delete errors[each];
+              isTrue.graduation = false;
+            }
+          }
+          break;
+        }
+        case 'specialization': {
+          if (isTrue.specialization) {
+            if (!docData.specialization.trim().length) {
+              errors[each] = "*Please fill above field";
+            } else {
+              delete errors[each];
+              isTrue.specialization = false;
+            }
+          }
+          break;
+        }
+        case 'superSpecialization': {
+          if (isTrue.superSpeciallization) {
+            if (!docData.superSpecialization.trim().length) {
+              errors[each] = "*Please fill above field";
+            } else {
+              delete errors[each];
+              isTrue.superSpecialization = false;
+            }
+          }
+          break;
+        }
+        default: {
+          console.log("Error in validation_switch_case ");
+          break;
+        }
       }
-    }
-
-    if (typeof fields["fee"] !== "undefined") {
-      if (!fields["fee"].toString().match(/^[0-9]{4,5}$/)) {
-        formIsValid = false;
-        errors["fee"] = "*Please enter valid Amount between 1,000 - 99,000";
-      }
-    }
-
-    if(typeof fields["qualification"] !== "undefined"){
-      if(!fields["qualification"].match(/^[a-zA-Z]*$/)){
-        formIsValid=false;
-        errors["qualification"] = "*Qualifications cannot contain a number or special character";
-      }
-    }
-
-    if (!fields["location"]) {
-      formIsValid = false;
-      errors["location"] = "*Please enter the practising location"
-    }
-
-    // if(!["language"].length? formIsValid: false){
-    //   // formIsValid = false;
-    //   errors["language"] = "*Please select at least one languages"
-    // }
-
-    // if (typeof fields["email"] !== "undefined") {
-    //   //regular expression for email validation
-    //   // var pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/);
-    //   if (!fields["email"].match(/^[a-zA-Z0-9]{1}[a-zA-Z0-9._+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,3}$/)) {
-    //     formIsValid = false;
-    //     errors["email"] = "*Please enter valid email-ID.";
-    //   }
-    // }
-
-    if (typeof fields["phone"] !== "undefined") {
-      if (!fields["phone"].match(/^[0-9]{10}$/)) {
-        formIsValid = false;
-        errors["phone"] = "*Please enter valid 10 digit mobile no.";
-      }
-    }
-
-    // if(!fields["gender"]){
-    //   formIsValid = false;
-    //   errors["gender"] = "*Please select the gender"
-    // }
-
-    if (typeof fields["registrationNumber"] !== "undefined") {
-      if(!fields["registrationNumber"].match(/^[a-zA-Z]*$/)){
-      formIsValid = false;
-      errors["registrationNumber"] = "*Please enter a valid Medical Registration Number"
-    }
-  }
-
-    if (typeof fields["specialty"] !== "undefined") {
-      if(!fields["specialty"].match(/^[a-zA-Z]*$/)){
-      formIsValid = false;
-      errors["specialty"] = "*Please enter a valid specialization"
-    }
-  }
-
-    if (typeof fields["superSpecialty"] !== "undefined") {
-      if(!fields["superSpecialty"].match(/^[a-zA-Z]*$/)){
-      formIsValid = false;
-      errors["superSpecialty"] = "*Please enter the valid super-specialization"
-    }
-  }
-
-    this.setState({
-      errors: errors
     });
-    return formIsValid;
+    this.setState({ errors });
+    return Object.keys(errors).length ? errors : null;
   }
+
 
   render() {
+    const { docData, specialities, errors } = this.state;
     return (
-      <div id="main-registration-container">
-        <div id="register">
-          {this.state.status === true &&
-            <form method="post" name="userRegistrationForm" onSubmit={this.submituserRegistrationForm} >
-              <label><strong>Name :</strong></label>
-              <input type="text" name="name" value={this.state.fields.name?.full || ""} onChange={this.handleChange} />
-              <div className="errorMsg">{this.state.errors.name}</div>
+      <React.Fragment>
+        <section className='d-flex justify-content-center'>
+          <form onSubmit={this.handleSubmit}>
+            <div>
+              <div className='form-group'>
+                <label htmlFor='Doctor Name'>Name</label>
+                <input
+                  id="nameInput"
+                  type='text'
+                  name="name"
+                  value={docData.name}
+                  placeholder="Enter Name"
+                  onChange={(e) =>
+                    this.handleChange("name", e.target.value)
+                  }
+                />
+                {errors && (
+                  <div>
+                    <small style={{ color: "red" }}>
+                      {errors.name}
+                    </small>
+                  </div>
+                )}
+              </div>
+              <div className='form-group'>
+                <label htmlFor='Speciality'>Speciality</label>
+                <select
 
-              <label><strong> Speaciality(FIX) :</strong></label>
-              <select onChange={this.handleChange} value={this.state.fields._specialty?.name || ""}>
-                <option value="" >Cardiology</option>
-                <option value="">Speciality2</option>
-                <option value="">Speciality3</option>
-              </select>
-              <div className="errorMsg">{this.state.errors._specialty?.name || ""}</div>
+                  className='form-control'
+                  id='specialtyInput'
+                  name='specialty'
+                  onChange={(e) => this.handleChange("specialty", e.target.value)}>
 
-              <label><strong> Experience :</strong></label>
-              <input type="number" name="experience" value={this.state.fields.experience} onChange={this.handleChange} />
-              <div className="errorMsg">{this.state.errors.experience}</div>
+                  {specialities.map((e) => <option key={e} value={e}>{e}</option>)}
+                </select>
+                {errors && (
+                  <div>
+                    <small style={{ color: "red" }}>
+                      {errors.specialty}
+                    </small>
+                  </div>
+                )}
+              </div>
+            </div>
+            <div>
+              <div className='form-group'>
+                <label htmlFor=''>Experience</label>
+                <input type='number' id="experienceInput" name="experience" value={docData.experience} min={0}
+                  onChange={(e) =>
+                    this.handleChange("experience", parseInt(e.target.value))
+                  }
+                />
+                {errors && (
+                  <div>
+                    <small style={{ color: "red" }}>
+                      {errors.experience}
+                    </small>
+                  </div>
+                )}
+              </div>
 
-              <label><strong> Consult Fees :</strong></label>
-              <input type="number" name="fee" value={this.state.fields.fee} onChange={this.handleChange} />
-              <div className="errorMsg">{this.state.errors.fee}</div>
+              <div className='form-group'>
+                <label htmlFor=''>Consult Fees</label>
+                <input type='number' id="consultFeesInput" name='consultFees' value={docData.consultFees} min={0}
+                  onChange={(e) =>
+                    this.handleChange("consultFees", parseInt(e.target.value))
+                  }
+                />
+                {errors && (
+                  <div>
+                    <small style={{ color: "red" }}>
+                      {errors.consultFees}
+                    </small>
+                  </div>
+                )}
+              </div>
+            </div>
+            <div>
+              <div className='form-group'>
+                <label htmlFor=''>Qualification</label>
+                <input type='text' id="qualificationInput" name="qualification" value={docData.qualification}
+                  onChange={(e) =>
+                    this.handleChange("qualification", e.target.value.trim())
+                  }
+                />
+                {errors && (
+                  <div>
+                    <small style={{ color: "red" }}>
+                      {errors.qualification}
+                    </small>
+                  </div>
+                )}
+              </div>
+              <div className='form-group'>
+                <label htmlFor=''>Practising At</label>
+                <input type='text' name="practisingAt" value={docData.location}
+                  onChange={(e) =>
+                    this.handleChange("practisingAt", e.target.value.trim())
+                  }
+                />
+                {errors && (
+                  <div>
+                    <small style={{ color: "red" }}>
+                      {errors.location}
+                    </small>
+                  </div>
+                )}
+              </div>
+            </div>
+            <div>
+              <div>
+                <label htmlFor=''>Languages</label>
+              </div>
+              <div>
+                <div className='form-check-inline'>
+                  <label className='form-check-label' >
+                    <input
+                      id='LH'
+                      type='checkbox'
+                      className='form-check-input'
+                    />Hindi</label>
+                </div>
+                <div className='form-check-inline'>
+                  <label className='form-check-label'>
+                    <input
+                      type='checkbox'
+                      className='form-check-input'
+                    />English</label>
+                </div>
+                <div className='form-check-inline'>
+                  <label className='form-check-label'>
+                    <input
+                      type='checkbox'
+                      className='form-check-input'
+                    />Bengali </label>
+                </div>
+                <div className='form-check-inline'>
+                  <label className='form-check-label'>
+                    <input
+                      type='checkbox'
+                      className='form-check-input'
+                    />Telugu</label>
+                </div>
+                <div className='form-check-inline'>
+                  <label className='form-check-label'>
+                    <input
+                      type='checkbox'
+                      className='form-check-input'
+                    />Gujrati</label>
+                </div>
+                <div className='form-check-inline'>
+                  <label className='form-check-label'>
+                    <input
+                      type='checkbox'
+                      className='form-check-input'/>Tamil
+                   </label>
+                </div>
+                </div>
+                {errors && (
+                  <div>
+                    <small style={{ color: "red" }}>
+                      {errors.lang}</small>
+                  </div>
+                )}
+              <div className='form-group'>
+                <label htmlFor=''>Email</label>
+                <input type='email' name="email" value={docData.email}
+                  onChange={(e) =>
+                    this.handleChange("email", e.target.value.trim())
+                  } />
+                {errors && (
+                  <div>
+                    <small style={{ color: "red" }}>
+                      {errors.email}
+                    </small>
+                  </div>
+                )}
+              </div>
+              <div className='form-group'>
+                <label htmlFor=''>Phone</label>
+                <input type='number' name="phone" value={docData.phone}
+                  onChange={(e) =>
+                    this.handleChange("phone", parseInt(e.target.value))
+                  } />
+                {errors && (
+                  <div>
+                    <small style={{ color: "red" }}>
+                      {errors.phone}
+                      {/* * Please fill above field */}
+                    </small>
+                  </div>
+                )}
+              </div>
+            </div>
+            <div>
+              <div>
+                <label htmlFor=''>Gender</label>
+                <div className='form-check-inline'>
+                  <label className='form-check-label'>
+                    <input
+                      type='checkbox'
+                      className='form-check-input'
+                      name="gender"
+                      value="Male"
+                      checked={docData.gender === "Male" ? true : false}
 
-              <label><strong> Qualification :</strong></label>
-              <input type="text" name="qualification" value={this.state.fields.qualification} onChange={this.handleChange} />
-              <div className="errorMsg">{this.state.errors.qualification}</div>
-
-              <label><strong> Practising At :</strong></label>
-              <input type="text" name="location" value={this.state.fields.location?.city || ""} onChange={this.handleChange} />
-              <div className="errorMsg">{this.state.errors.location}</div>
-
-              <label><strong> Languages known(FIX) :</strong></label>
-              <table>
-                <tbody>
-                  <tr>
-                    <td >HINDI</td>
-                    <td className="gender"><input type="checkbox" name="hindi" value={this.state.fields} onChange={this.handleChange} checked/></td>
-                  </tr>
-                  <tr>
-                    <td >ENGLISH</td>
-                    <td className="gender"><input type="checkbox" name="english" value={this.state.fields} onChange={this.handleChange} /></td>
-                  </tr>
-                  <tr>
-                    <td>BENGALI</td>
-                    <td className="gender"><input type="checkbox" name="bengali" value={this.state.fields} onChange={this.handleChange} /></td>
-                  </tr>
-                  <tr>
-                    <td>ORIYA</td>
-                    <td className="gender"><input type="checkbox" name="oriya" value={this.state.fields} onChange={this.handleChange} /></td>
-                  </tr>
-                  <tr>
-                    <td>ASSAMESE</td>
-                    <td className="gender"><input type="checkbox" name="assamese" value={this.state.fields} onChange={this.handleChange} /></td>
-                  </tr>
-                  <tr>
-                    <td>GUJRATI</td>
-                    <td className="gender"><input type="checkbox" name="gujrati" value={this.state.fields} onChange={this.handleChange} /></td>
-                  </tr>
-                  <tr>
-                    <td>MARATHI</td>
-                    <td className="gender"><input type="checkbox" name="marathi" value={this.state.fields} onChange={this.handleChange} /></td>
-                  </tr>
-                  <tr>
-                    <td>TELUGU</td>
-                    <td className="gender"><input type="checkbox" name="telugu" value={this.state.fields} onChange={this.handleChange} /></td>
-                  </tr>
-                  <tr>
-                    <td>TAMIL</td>
-                    <td className="gender"><input type="checkbox" name="tamil" value={this.state.fields} onChange={this.handleChange} /></td>
-                  </tr>
-                  <tr>
-                    <td>PUNJABI</td>
-                    <td className="gender"><input type="checkbox" name="punjabi" value={this.state.fields} onChange={this.handleChange} /></td>
-                  </tr>
-                  <tr>
-                    <td>MALAYALAM</td>
-                    <td className="gender"><input type="checkbox" name="malayalam" value={this.state.fields} onChange={this.handleChange} /></td>
-                  </tr>
-                  <tr>
-                    <td>KANNADA</td>
-                    <td className="gender"><input type="checkbox" name="kannada" value={this.state.fields} onChange={this.handleChange} /></td>
-                  </tr>
-                </tbody>
-              </table>
-              <div className="errorMsg">{this.state.errors.language}</div>
-
-              <label><strong> Email :</strong></label>
-              <input type="text" name="email" value={this.state.fields.email} onChange={this.handleChange} />
-              <div className="errorMsg">{this.state.errors.email}</div>
-
-              <label><strong> Phone :</strong></label>
-              <input type="text" name="phone" value={this.state.fields.phone} onChange={this.handleChange} />
-              <div className="errorMsg">{this.state.errors.phone}</div>
-
-              <label><strong> Gender(FIX) :</strong></label>
-              <table>
-                <tbody>
-                  <tr>
-                    <td>Male</td>
-                    <td className="gender"><input type="radio" name="gender" value={this.state.fields} onChange={this.handleChange} checked/></td>
-                  </tr>
-                  <tr>
-                    <td>Female</td>
-                    <td className="gender"><input type="radio" name="gender" value={this.state.fields} onChange={this.handleChange} /></td>
-                  </tr>
-                  <tr>
-                    <td>Other</td>
-                    <td className="gender"><input type="radio" name="gender" value={this.state.fields} onChange={this.handleChange} /></td>
-                  </tr>
-                </tbody>
-              </table>
-              <div className="errorMsg">{this.state.errors.gender}</div>
-
-              <label><strong> Medical Registration Number :</strong></label>
-              <input type="text" name="registrationNumber" value={this.state.fields.registrationNumber} onChange={this.handleChange} />
-              <div className="errorMsg">{this.state.errors.registrationNumber}</div>
-
-              {/* <label><strong> Graduation :</strong></label>
-              <textarea type="text" name="graduation" value={this.state.fields.qualification} onChange={this.handleChange} ></textarea>
-              <div className="errorMsg">{this.state.errors.graduation}</div> */}
-
-              <label><strong> Specialization :</strong></label>
-              <textarea type="text" name="specialty" value={this.state.fields.specialty} onChange={this.handleChange} ></textarea>
-              <div className="errorMsg">{this.state.errors.specialty}</div>
-
-              <label><strong> Super Specialization :</strong></label>
-              <textarea type="text" name="superSpeciality" value={this.state.fields.superSpeciality} onChange={this.handleChange} ></textarea>
-              <div className="errorMsg">{this.state.errors.superSpeciality}</div>
-
-              <input type="submit" className="button" value="Submit Data" />
-            </form>
-          }
-        </div>
-      </div>
-
+                      onChange={(e) =>
+                        this.handleChange("gender", e.target.value)
+                      }
+                    />Male</label>
+                </div>
+                <div className='form-check-inline'>
+                  <label className='form-check-label'>
+                    <input
+                      type='checkbox'
+                      className='form-check-input'
+                      name="gender"
+                      value="Female"
+                      checked={docData.gender === "Female" ? true : false}
+                      onChange={(e) =>
+                        this.handleChange("gender", e.target.value)
+                      }
+                    />Female</label>
+                </div>
+              </div>
+              <div>
+                <label htmlFor=''>
+                  Medical Registration Number</label>
+                <input type='text' name="regNo" value={docData.regNo} min={0}
+                  onChange={(e) =>
+                    this.handleChange("regNo", e.target.value.trim())
+                  } />
+                {errors && (
+                  <div>
+                    <small style={{ color: "red" }}>
+                      {errors.regNo}
+                    </small>
+                  </div>
+                )}
+              </div>
+            </div>
+            <div>
+              <div className='form-group'>
+                <label htmlFor='comment'>Graduation</label>
+                <textarea
+                  name="text"
+                  className='form-control'
+                  rows='5'
+                  id='comment' value={docData.qualification} onChange={(e) =>
+                    this.handleChange("graduation", e.target.value.trim())
+                  }></textarea>
+                {errors && (
+                  <div>
+                    <small style={{ color: "red" }}>
+                      {errors.qualification}
+                    </small>
+                  </div>
+                )}
+              </div>
+              <div className='form-group'>
+                <label htmlFor='comment'>Specialization</label>
+                <textarea
+                  name="text"
+                  className='form-control'
+                  rows='5'
+                  id='comment' value={docData.specialize}
+                  onChange={(e) =>
+                    this.handleChange("specialization", e.target.value.trim())
+                  }></textarea>
+                {errors && (
+                  <div>
+                    <small style={{ color: "red" }}>
+                      {errors.specialize}
+                    </small>
+                  </div>
+                )}
+              </div>
+            </div>
+            <div>
+              <div className='form-group'>
+                <label htmlFor='comment'>
+                  Super Specialization
+                                </label>
+                <textarea
+                  name="text"
+                  className='form-control'
+                  rows='5'
+                  id='comment' value={this.state.docData.superSpecilize}
+                  onChange={(e) =>
+                    this.handleChange("superSpecialize", e.target.value.trim())
+                  }></textarea>
+                {errors && (
+                  <div>
+                    <small style={{ color: "red" }}>
+                      {errors.superSpecilize}
+                    </small>
+                  </div>
+                )}
+              </div>
+            </div>
+            <hr />
+            <button>Save</button>
+          </form>
+        </section>
+      </React.Fragment>
     );
   }
-
-
 }
-
-
 export default Form;

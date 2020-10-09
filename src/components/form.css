@@ -16,7 +16,7 @@
     width: 90%;
     padding-top: 30px;
   }
-  
+
   form input {
     padding: 10px;
     border: solid 1px #BDC7D8;
@@ -38,10 +38,6 @@
     margin-bottom: 12px;
   }
   
-  .sucessMsg {
-    color: #6B8E23;
-    margin-bottom: 10px;
-  }
 
   .gender{
     height:50px;
