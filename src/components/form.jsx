@@ -67,11 +67,10 @@ class Form extends Component {
         const authToken =
           "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlY2U0MjA0ZmZkOTliMGRkMTNhNDNjMSIsIl9pZCI6IjVlY2U0MjA0ZmZkOTliMGRkMTNhNDNjMSIsImZ1bGxOYW1lIjoiS2lyYW4gRGVibmF0aCIsImVtYWlsIjoidG90YW4wMDEwQGdtYWlsLmNvbSIsInVzZXJUeXBlIjoiQWRtaW4iLCJpc1N1cGVyQWRtaW4iOnRydWUsImlhdCI6MTYwMTk4Mjk3MiwiZXhwIjoxNjA0NTc0OTcyfQ.rnyN3M76h7xlzrZsY9gcIXa968uMcrW1J0o_GQzw-P0";
         if (authToken) {
-          console.log(authToken);
           headers["Authorization"] = authToken;
         }
-      } catch (e) {
-        console.log(e);
+      } catch (err) {
+        console.log(err);
       }
     }
     return new Promise((resolve, reject) => {
@@ -83,9 +82,7 @@ class Form extends Component {
           .then((res) => res.json())
           .then((jsonResponse) => {
             if (jsonResponse.error === false) {
-              // console.log(jsonResponse);
               let details = jsonResponse.doctor;
-              console.log("Doctor Detail: ", details);
               this.setState({
                 docData: {
                   name: details.name.full,
@@ -105,16 +102,15 @@ class Form extends Component {
               });
               resolve(jsonResponse);
             } else {
-              console.log(jsonResponse);
               reject(jsonResponse);
             }
           })
-          .catch((e) => {
-            console.log("XHR GET Error: ", e);
-            reject(e);
+          .catch((err) => {
+            console.log("XHR GET Error: ", err);
+            reject(err);
           });
-      } catch (e) {
-        console.log(e);
+      } catch (err) {
+        console.log(err);
         reject();
       }
     });
@@ -130,11 +126,10 @@ class Form extends Component {
         const authToken =
           "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlY2U0MjA0ZmZkOTliMGRkMTNhNDNjMSIsIl9pZCI6IjVlY2U0MjA0ZmZkOTliMGRkMTNhNDNjMSIsImZ1bGxOYW1lIjoiS2lyYW4gRGVibmF0aCIsImVtYWlsIjoidG90YW4wMDEwQGdtYWlsLmNvbSIsInVzZXJUeXBlIjoiQWRtaW4iLCJpc1N1cGVyQWRtaW4iOnRydWUsImlhdCI6MTYwMTk4Mjk3MiwiZXhwIjoxNjA0NTc0OTcyfQ.rnyN3M76h7xlzrZsY9gcIXa968uMcrW1J0o_GQzw-P0";
         if (authToken) {
-          console.log(authToken);
           headers["Authorization"] = authToken;
         }
-      } catch (e) {
-        console.log(e);
+      } catch (err) {
+        console.log(err);
       }
     }
     return new Promise((resolve, reject) => {
@@ -146,10 +141,8 @@ class Form extends Component {
           .then((res) => res.json())
           .then((jsonResponse) => {
             if (jsonResponse.error === false) {
-              console.log("Specialties Data: ", jsonResponse);
               resolve(jsonResponse);
               let speciality = jsonResponse.specialties.map((e) => {
-                console.log(e.name)
                 return e.name
               })
               this.setState({
@@ -160,12 +153,12 @@ class Form extends Component {
               reject(jsonResponse);
             }
           })
-          .catch((e) => {
-            console.log("XHR GET Error: ", e);
-            reject(e);
+          .catch((err) => {
+            console.log("XHR GET Error: ", err);
+            reject(err);
           });
-      } catch (e) {
-        console.log(e);
+      } catch (err) {
+        console.log(err);
         reject();
       }
     });
@@ -209,7 +202,7 @@ class Form extends Component {
       experience: true,
       consultFees: true,
       qualification: true,
-      practisingAt: true,
+      location: true,
       lang: true,
       email: true,
       phone: true,
@@ -221,10 +214,9 @@ class Form extends Component {
     };
     this.setState({ isTrue }, () => {
       let errors = this.validateForm();
-      console.log(errors);
       if (!errors) {
         const { docData } = this.state;
-        console.log("Final API call: ", docData);
+        console.log("Doctor Details: ", docData);
       }
     });
   };
@@ -263,7 +255,7 @@ class Form extends Component {
             if (docData.experience < 0) {
               errors[each] = "*Please Enter a valid experience";
             } if (!docData.experience) {
-              errors[each] = "*Please fill above field";
+              errors[each] = "*Required";
             } else {
               delete errors[each];
               isTrue.experience = false;
@@ -276,7 +268,7 @@ class Form extends Component {
             if (docData.consultFees < 0) {
               errors[each] = "*Please Enter a valid Fees";
             } if (!docData.consultFees) {
-              errors[each] = "* Please fill above field";
+              errors[each] = "*Required";
             } else {
               delete errors[each];
               isTrue.consultFees = false;
@@ -287,7 +279,7 @@ class Form extends Component {
         case 'qualification': {
           if (isTrue.qualification) {
             if (!docData.qualification.trim().length) {
-              errors[each] = "*Please fill above field";
+              errors[each] = "*Required";
             } else {
               delete errors[each];
               isTrue.qualification = false;
@@ -295,13 +287,13 @@ class Form extends Component {
           }
           break;
         }
-        case 'practisingAt': {
-          if (isTrue.practisingAt) {
-            if (!docData.practisingAt.trim().length) {
-              errors[each] = "*Please fill above field";
+        case 'location': {
+          if (isTrue.location) {
+            if (!docData.location.trim().length) {
+              errors[each] = "*Required";
             } else {
               delete errors[each];
-              isTrue.practisingAt = false;
+              isTrue.location = false;
             }
           }
           break;
@@ -312,7 +304,7 @@ class Form extends Component {
               errors[each] = "*Please Enter a valid phone number";
             } else {
               if (!docData.phone) {
-                errors[each] = "*Please fill above field";
+                errors[each] = "*Required";
               }
               delete errors[each];
               isTrue.phone = false;
@@ -331,7 +323,7 @@ class Form extends Component {
               errors.email = "*Invalid Email";
             }
             if (!docData.email.trim().length) {
-              errors.email = "* Please fill above field";
+              errors.email = "*Required";
             } else {
               delete errors[each];
               isTrue.email = false;
@@ -364,7 +356,7 @@ class Form extends Component {
         case 'graduation': {
           if (isTrue.graduation) {
             if (!docData.graduation.trim().length) {
-              errors[each] = "*Please fill above field";
+              errors[each] = "*Required";
             } else {
               delete errors[each];
               isTrue.graduation = false;
@@ -375,7 +367,7 @@ class Form extends Component {
         case 'specialization': {
           if (isTrue.specialization) {
             if (!docData.specialization.trim().length) {
-              errors[each] = "*Please fill above field";
+              errors[each] = "*Required";
             } else {
               delete errors[each];
               isTrue.specialization = false;
@@ -386,7 +378,7 @@ class Form extends Component {
         case 'superSpecialization': {
           if (isTrue.superSpeciallization) {
             if (!docData.superSpecialization.trim().length) {
-              errors[each] = "*Please fill above field";
+              errors[each] = "*Required";
             } else {
               delete errors[each];
               isTrue.superSpecialization = false;
@@ -395,7 +387,7 @@ class Form extends Component {
           break;
         }
         default: {
-          console.log("Error in validation_switch_case ");
+          console.log("Error");
           break;
         }
       }
@@ -502,10 +494,10 @@ class Form extends Component {
                 )}
               </div>
               <div className='form-group'>
-                <label htmlFor=''>Practising At</label>
-                <input type='text' name="practisingAt" value={docData.location}
+                <label htmlFor=''>Location</label>
+                <input type='text' name="location" value={docData.location}
                   onChange={(e) =>
-                    this.handleChange("practisingAt", e.target.value.trim())
+                    this.handleChange("location", e.target.value.trim())
                   }
                 />
                 {errors && (
@@ -709,7 +701,7 @@ class Form extends Component {
               </div>
             </div>
             <hr />
-            <button>Save</button>
+            <button id="btn-submit">Submit</button>
           </form>
         </section>
       </React.Fragment>
